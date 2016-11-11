@@ -1,20 +1,20 @@
 # Language: Français
-# Module: dcFree - 0.1.0-r0038
-# Date: 2016-11-05 13:34:29
+# Module: dcFree - 0.1.0-r0048
+# Date: 2016-11-10 20:55:53
 # Translated with translater 2013.05.11
 
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: dcFree 0.1.0-r0038\n"
+"Project-Id-Version: dcFree 0.1.0-r0048\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-05T13:34:29+00:00\n"
+"PO-Revision-Date: 2016-11-10T20:55:53+00:00\n"
 "Last-Translator: Gvx\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: inc/class.dcFree.php:14
+#: inc/class.dcFree.php:10
 msgid "Adaptation for Free hosting"
 msgstr "Adaptation pour l'hebergement Free"
 
@@ -36,6 +36,10 @@ msgstr "Impossible de sauver la configuration"
 msgid "Redirection not found"
 msgstr "Redirection introuvable"
 
+#: inc/class.dcFree.php:85
+msgid "The upgrade option is global (Applies to all blogs)"
+msgstr "La mise à jour des options est globale (S'applique à tous les blogs)"
+
 #: inc/class.dcFree.php:88
 msgid "Inhibits the backup for the update"
 msgstr "Inhibe la sauvegarde de la mise à jour"
@@ -43,6 +47,14 @@ msgstr "Inhibe la sauvegarde de la mise à jour"
 #: inc/class.dcFree.php:89
 msgid "Inhibits the backup for the update (limiting the file size to 1MB)."
 msgstr "Inhibe la sauvegarde de la mise à jour (limitation de la taille du fichier à 1 Mo)"
+
+#: inc/class.dcFree.php:92
+msgid "Configuration information"
+msgstr "Informations de configuration"
+
+#: inc/class.dcFree.php:95
+msgid "Overloading the class fileunzip"
+msgstr "Surcharge de la class fileunzip"
 
 #: inc/class.dcPluginHelper.php:29
 #: inc/class.dcPluginHelper.php:32

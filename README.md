@@ -1,9 +1,10 @@
 # README #
 
-Ce plugin pour [Dotclear](http://fr.dotclear.org/) permet d'adapter dotclear aux limitations de l’hébergeur Free.
+Ce plugin pour [Dotclear](http://fr.dotclear.org/) permet de l'adapter aux limitations de l’hébergeur Free.
 
 ## Caractéristiques ##
 Ce plugin contourne les limitations suivantes de l’hébergeur Free:
+
 * Mise a jour automatique de dotclear
 
 ## Pré-requis ##

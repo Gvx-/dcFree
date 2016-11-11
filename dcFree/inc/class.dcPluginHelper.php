@@ -38,17 +38,17 @@ abstract class dcPluginHelper29h {
 		# upgrade previous versions - /!\ be exceeded timeout for a lot blogs
 		$step = (empty($_GET['step_pu']) ? $old_version : $_GET['step_pu']);
 		unset($_GET['step_pu']);												# reset for next plugin
-		$timeout = microtime(true) + ini_get('max_execution_time') - 5;			# timeout = max_execution_time - 5 seconds
+		$timeout = time() + ini_get('max_execution_time') - 5;			# timeout = max_execution_time - 5 seconds
 		$this->debugLog('<'.__METHOD__.'>: old_version='.$old_version.' / step='.$step);
 		if(!empty($old_version)) {
 			try {
 				if(version_compare($old_version, '2.0.0-r0143', '<') && version_compare($step, '2.0.0-r0143', '<')) {
 					# upgrade all blogs settings
-					
+
 					# TODO HERE Specifics upgrades
-					
+
 					# redirect if > timeout
-					if(microtime(true) >= $timeout) { $this->core->adminurl->redirect('admin.self', array('step_pu' => '2.0.0-r0143')); }
+					if(time() >= $timeout) { $this->core->adminurl->redirect('admin.self', array('step_pu' => '2.0.0-r0143')); }
 				}
 				# TODO update for others versions
 			} catch(Exception $e) {
@@ -137,22 +137,22 @@ abstract class dcPluginHelper29h {
 
 	public function _admin() {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
-		
+
 	}
-	
+
 	public function _service() {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
-		
+
 	}
-	
+
 	public function _public() {
-		
+
 	}
-	
+
 	public function _xmlrpc() {
-		
+
 	}
-	
+
 	### Standard functions ###
 
 	protected $plugin_id;				// ID plugin
@@ -374,29 +374,13 @@ abstract class dcPluginHelper29h {
 
 	### Common functions ###
 
-	protected static function getVarDir($dir='', $create=false) {
-		$dir = trim($dir, '\\/');
-		$var_dir = path::real(DC_VAR.(empty($dir) ? '' : '/'.$dir), false);
-		if(strpos($var_dir, DC_VAR) === false) { throw new Exception(__('The folder is not in the var directory')); }
-		if(!is_dir($var_dir)) {
-			if($create) {
-				if(!@mkdir($var_dir, 0700, true)) { throw new Exception(__('Creating a var directory failed')); }
-				$f = DC_VAR.'/.htaccess';
-				if (!file_exists($f)) { @file_put_contents($f,'Require all denied'.NL.'Deny from all'.NL); }
-			} else{
-				return false;
-			}
-		}
-		return $var_dir;
-	}
-
 	public final function settings($key, $value=null, $scope='default') {
 		if(is_null($value)) {
 			try {
 				if($scope == 'global' || $scope === true) {
 					return $this->core->blog->settings->{$this->plugin_id}->getGlobal($key);
 				} elseif($scope == 'local') {
-					return $this->core->blog->settings->{$this->plugin_id}->getlocal($key);
+					return $this->core->blog->settings->{$this->plugin_id}->getLocal($key);
 				}
 				return $this->core->blog->settings->{$this->plugin_id}->$key;
 			} catch(Exception $e) {
@@ -415,9 +399,14 @@ abstract class dcPluginHelper29h {
 		}
 	}
 
-	protected final function userSettings($key, $value=null, $scope='default') {
+	public final function userSettings($key, $value=null, $scope='default') {
 		if(is_null($value)) {
 			try {
+				if($scope == 'global' || $scope === true) {
+					return $this->core->auth->user_prefs->{$this->plugin_id}->getGlobal($key);
+				} elseif($scope == 'local') {
+					return $this->core->auth->user_prefs->{$this->plugin_id}->getLocal($key);
+				}
 				return $this->core->auth->user_prefs->{$this->plugin_id}->$key;
 			} catch(Exception $e) {
 				$this->debugDisplay('User settings read error.('.$key.')');
@@ -434,8 +423,8 @@ abstract class dcPluginHelper29h {
 			}
 		}
 	}
-	
-	protected final function info($item=null, $default=null) {
+
+	public final function info($item=null, $default=null) {
 		if(empty($item) || $item == 'id') {
 			return $this->plugin_id;
 		} elseif($item == 'adminUrl') {
@@ -446,6 +435,28 @@ abstract class dcPluginHelper29h {
 			$res = $this->core->plugins->moduleInfo($this->plugin_id, $item);
 			return $res === null ? $default : $res;
 		}
+	}
+
+	public function nextStep($step, $timeout=false) {
+		if(empty($timeout) || $timeout < time()) { return; }
+		$_GET['step'] = $step;
+		http::redirect(basename(parse_url(http::getSelfURI(), PHP_URL_PATH)).'?'.http_build_query($_GET,'','&amp;'));
+	}
+
+	protected static function getVarDir($dir='', $create=false) {
+		$dir = trim($dir, '\\/');
+		$var_dir = path::real(DC_VAR.(empty($dir) ? '' : '/'.$dir), false);
+		if(strpos($var_dir, DC_VAR) === false) { throw new Exception(__('The folder is not in the var directory')); }
+		if(!is_dir($var_dir)) {
+			if($create) {
+				if(!@mkdir($var_dir, 0700, true)) { throw new Exception(__('Creating a var directory failed')); }
+				$f = DC_VAR.'/.htaccess';
+				if (!file_exists($f)) { @file_put_contents($f,'Require all denied'.NL.'Deny from all'.NL); }
+			} else{
+				return false;
+			}
+		}
+		return $var_dir;
 	}
 
 	# since dc 2.9
@@ -515,7 +526,7 @@ abstract class dcPluginHelper29h {
 			@file_put_contents ($this->debug_logfile, NL.'['.date('Y-m-d-H-i-s').'] : ['.$this->plugin_id.'] : ['.$this->core->blog->id.'] : '.$text, FILE_APPEND);
 		}
 	}
-	
+
 	public final function setDebugFilename($filename=null, $reset_file=false) {
 		if(empty($filename)) {
 			$this->debug_logfile = self::getVarDir('logs', true).'/log_'.$this->plugin_id.'.txt';

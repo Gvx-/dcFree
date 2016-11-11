@@ -73,7 +73,7 @@ class fileUnzip {
 			throw new Exception('Unable to open file.');
 		}
 	}
-	
+
 	public function unzip($file_name, $target=false) {
 		if(empty($this->compressed_list)) {
 			$this->getList($file_name);
@@ -94,7 +94,7 @@ class fileUnzip {
 		if($target) {
 			$this->testTargetDir(dirname($target));
 		}
-		
+
 		$zip = zip_open($this->file_name);
 		if(is_resource($zip)) {
 			while(is_resource($zip_entry = zip_read($zip))) {
@@ -102,7 +102,7 @@ class fileUnzip {
 				if($name != $file_name || substr($name, -1, 1) == '/') {
 					continue;
 				}
-				
+
 				if(zip_entry_open($zip, $zip_entry, "r")) {
 					$content = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
 					$this->putContent($content, $target);
@@ -117,7 +117,7 @@ class fileUnzip {
 		}
 		return $content;
 	}
-	
+
 	public function getFilesList() {
 		if(empty($this->compressed_list)) {
 			$this->getList();
@@ -250,7 +250,7 @@ class fileUnzip {
 			$this->compressed_list[$name]['uncompressed_size']		= zip_entry_filesize($zip_entry);
 			$this->compressed_list[$name]['extra_field']			= null;
 			$this->compressed_list[$name]['contents_start_offset']	= null;
-			
+
 			zip_entry_close($zip_entry);
 
 			if(strtolower($stop_on_file) == strtolower($name)) {
@@ -260,7 +260,7 @@ class fileUnzip {
 		$this->close();
 		return true;
 	}
-	
+
 	protected function loadFileListBySignatures($stop_on_file=false, $exclude=false) {
 		return $this->loadFileListByEOF($stop_on_file, $exclude);
 	}

@@ -11,14 +11,14 @@ $this->registerModule(
 	/* Name */			'dcFree',
 	/* Description*/	'Adaptation for Free hosting',
 	/* Author */		'Gvx',
-	/* Version */		'0.1.0-r0038',
+	/* Version */		'0.1.0-r0051',
 	array(
 		/* standard plugin options dotclear */
 		'permissions'				=>	'admin'
 		, 'type'					=>	'plugin'
 		, 'priority'				=>	1010
 		, 'support'		/* url */	=>	''
-		, 'details' 	/* url */	=>	''
+		, 'details' 	/* url */	=>	'https://bitbucket.org/Gvx_/dcfree'
 		, 'requires'	/* id(s) */	=>	array(
 			array('core', '2.9')
 		)
@@ -27,6 +27,10 @@ $this->registerModule(
 			//'self'		=> ''
 			//, 'blog'	=> '#params.id'
 			//, 'pref'	=> '#user-options.id'
+		)
+		/* specific plugin options */
+		, '_patchs'					=>	array(
+			'fileunzip'	=> function_exists('zip_open')
 		)
 	)
 );

@@ -7,21 +7,21 @@
  * -- END LICENSE BLOCK -----------------------------------------------------*/
 if(!defined('DC_RC_PATH')) { return; }
 
-# tags begin and end for config patch
-define('DC_FREE_CONFIG_BEGIN', "\n# BEGIN Free hosting bootstrap\n\n");
-define('DC_FREE_CONFIG_END', "\n# END Free hosting bootstrap\n\n");
-
 __('Adaptation for Free hosting');
 
 
 class dcFree extends dcPluginHelper29h {
+
+	# tags begin and end for config patch
+	const CONFIG_BEGIN = "\n# BEGIN Free hosting bootstrap\n\n";
+	const CONFIG_END = "\n# END Free hosting bootstrap\n\n";
 
 	protected function setDefaultSettings() {
 		# create config plugin (TODO: specific settings)
 		$this->core->blog->settings->addNamespace($this->plugin_id);
 		$this->core->blog->settings->{$this->plugin_id}->put('updateNoBackup', false, 'boolean', __('Update, no backup (filesize >1Mo)'), false, true);
 	}
-	
+
 	protected function installActions($old_version) {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
 		# Check config.php file
@@ -34,9 +34,9 @@ class dcFree extends dcPluginHelper29h {
 		# Backup original config.php
 		@copy(DC_RC_PATH, DC_RC_PATH.'.bak');
 		# Erase old code to config.php
-		$config_file = preg_replace('/'.DC_FREE_CONFIG_BEGIN.'.*'.DC_FREE_CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH));
+		$config_file = preg_replace('/'.self::CONFIG_BEGIN.'.*'.self::CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH));
 		# Add new code to config.php
-		@file_put_contents(DC_RC_PATH, $config_file.DC_FREE_CONFIG_BEGIN.@file_get_contents($append_file).DC_FREE_CONFIG_END);
+		@file_put_contents(DC_RC_PATH, $config_file.self::CONFIG_BEGIN.@file_get_contents($append_file).self::CONFIG_END);
 	}
 
 	protected function uninstallActions() {
@@ -44,19 +44,20 @@ class dcFree extends dcPluginHelper29h {
 		# specific actions for uninstall
 		# clean config.php
 		@copy(DC_RC_PATH, DC_RC_PATH.'.bak');
-		@file_put_contents(DC_RC_PATH, preg_replace('/'.DC_FREE_CONFIG_BEGIN.'.*'.DC_FREE_CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH)));
+		@file_put_contents(DC_RC_PATH, preg_replace('/'.self::CONFIG_BEGIN.'.*'.self::CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH)));
 	}
-	
+
 	public function _admin() {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
 		# Update fix
-		if($this->settings('updateNoBackup')) {
+		$scope = 'global';
+		if($this->settings('updateNoBackup', null, $scope)) {
 			if(basename($_SERVER['PHP_SELF']) == 'update.php') {
 				if(empty($_GET['step'])) {
 					dcPage::addWarningNotice('message', __('The backup is Inhibited (limiting the file size to 1MB).'));	// Add information notice
 				} elseif($_GET['step'] == 'backup') {
-					//http::redirect('update.php?step=unzip');					// Skip the backup step
-					$_GET['step'] = 'unzip';
+					//http::redirect('update.php?step=unzip');	// Skip the backup step
+					$_GET['step'] = 'unzip';					// Skip the backup step
 				}
 			}
 		}
@@ -64,10 +65,9 @@ class dcFree extends dcPluginHelper29h {
 
 	public function _config() {
 		if(!defined('DC_CONTEXT_ADMIN') || !$this->core->auth->isSuperAdmin()) { return; }
-		$scope = $this->configScope();
+		$scope = 'global';
 		if (isset($_POST['save'])) {
 			try {
-				//$this->settings('enabled', !empty($_POST['enabled']), $scope);
 				$this->settings('updateNoBackup', !empty($_POST['updateNoBackup']), $scope);
 				$this->core->blog->triggerBlog();
 				dcPage::addSuccessNotice(__('Configuration successfully updated.'));
@@ -82,13 +82,24 @@ class dcFree extends dcPluginHelper29h {
 			http::redirect($_REQUEST['redir']);
 		}
 		echo
-			$this->configBaseline($scope, false).
-			'<div class="fieldset">
-				<h3>'.__('Parameters').'</h3>
+			'<p class="anchor-nav"><span class="warning">'.__('The upgrade option is global (Applies to all blogs)').'</span></p>
+			<div class="fieldset">
+				<h3 class="pretty-title">'.__('Parameters').'</h3>
 				<p><label class="classic" for="updateNoBackup">'.form::checkbox('updateNoBackup','1',$this->settings('updateNoBackup', null, $scope)).__('Inhibits the backup for the update').'</label></p>
 				<p class="form-note">'.__('Inhibits the backup for the update (limiting the file size to 1MB).').'</p>
 			</div>
+			<div class="fieldset">
+				<h3 class="pretty-title">'.__('Configuration information').'</h3>
+				<p>
+					<img title="status" alt="status" src="'.($this->info('_patchs')['fileunzip'] ? 'images/check-on.png' : 'images/check-off.png').'" />
+					&nbsp;&nbsp;'.__('Overloading the class fileunzip').'
+				</p>
+			</div>
 			';
+	}
+
+	public static function getPatchs() {
+		return array_keys(array_filter($GLOBALS['core']->dcFree->info('_patchs')));
 	}
 
 }
