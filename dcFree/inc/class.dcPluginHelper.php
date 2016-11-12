@@ -439,8 +439,12 @@ abstract class dcPluginHelper29h {
 
 	public function nextStep($step, $timeout=false) {
 		if(empty($timeout) || $timeout < time()) { return; }
-		$_GET['step'] = $step;
-		http::redirect(basename(parse_url(http::getSelfURI(), PHP_URL_PATH)).'?'.http_build_query($_GET,'','&amp;'));
+		if(is_array($step)) {
+			foreach($step as $k => $v) { $_GET[$k] = $v; }
+		} elseif(!empty($step)) {
+			$_GET['step'] = $step;
+		}
+		http::redirect(basename(parse_url(http::getSelfURI(), PHP_URL_PATH)).'?'.http_build_query($_GET,'','&'));
 	}
 
 	protected static function getVarDir($dir='', $create=false) {

@@ -11,13 +11,13 @@ $this->registerModule(
 	/* Name */			'dcFree',
 	/* Description*/	'Adaptation for Free hosting',
 	/* Author */		'Gvx',
-	/* Version */		'0.1.0-r0051',
+	/* Version */		'0.1.0',
 	array(
 		/* standard plugin options dotclear */
 		'permissions'				=>	'admin'
 		, 'type'					=>	'plugin'
 		, 'priority'				=>	1010
-		, 'support'		/* url */	=>	''
+		, 'support'		/* url */	=>	'https://forum.dotclear.org/viewtopic.php?pid=338582'
 		, 'details' 	/* url */	=>	'https://bitbucket.org/Gvx_/dcfree'
 		, 'requires'	/* id(s) */	=>	array(
 			array('core', '2.9')
@@ -30,7 +30,7 @@ $this->registerModule(
 		)
 		/* specific plugin options */
 		, '_patchs'					=>	array(
-			'fileunzip'	=> function_exists('zip_open')
+			'fileunzip'	=> (defined('DC_FREE') && function_exists('zip_open'))
 		)
 	)
 );

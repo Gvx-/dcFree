@@ -16,12 +16,13 @@ class dcFree extends dcPluginHelper29h {
 	const CONFIG_BEGIN = "\n# BEGIN Free hosting bootstrap\n\n";
 	const CONFIG_END = "\n# END Free hosting bootstrap\n\n";
 
+	# create config plugin (TODO: specific settings)
 	protected function setDefaultSettings() {
-		# create config plugin (TODO: specific settings)
 		$this->core->blog->settings->addNamespace($this->plugin_id);
 		$this->core->blog->settings->{$this->plugin_id}->put('updateNoBackup', false, 'boolean', __('Update, no backup (filesize >1Mo)'), false, true);
 	}
 
+	# specific actions for install
 	protected function installActions($old_version) {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
 		# Check config.php file
@@ -39,14 +40,15 @@ class dcFree extends dcPluginHelper29h {
 		@file_put_contents(DC_RC_PATH, $config_file.self::CONFIG_BEGIN.@file_get_contents($append_file).self::CONFIG_END);
 	}
 
+	# specific actions for uninstall
 	protected function uninstallActions() {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
-		# specific actions for uninstall
 		# clean config.php
 		@copy(DC_RC_PATH, DC_RC_PATH.'.bak');
 		@file_put_contents(DC_RC_PATH, preg_replace('/'.self::CONFIG_BEGIN.'.*'.self::CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH)));
 	}
 
+	# actions _admin file
 	public function _admin() {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
 		# Update fix
@@ -63,6 +65,7 @@ class dcFree extends dcPluginHelper29h {
 		}
 	}
 
+	# actions _config file
 	public function _config() {
 		if(!defined('DC_CONTEXT_ADMIN') || !$this->core->auth->isSuperAdmin()) { return; }
 		$scope = 'global';
@@ -98,6 +101,7 @@ class dcFree extends dcPluginHelper29h {
 			';
 	}
 
+	# specifics plugin functions 
 	public static function getPatchs() {
 		return array_keys(array_filter($GLOBALS['core']->dcFree->info('_patchs')));
 	}

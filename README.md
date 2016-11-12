@@ -5,11 +5,12 @@ Ce plugin pour [Dotclear](http://fr.dotclear.org/) permet de l'adapter aux limit
 ## Caractéristiques ##
 Ce plugin contourne les limitations suivantes de l’hébergeur Free:
 
-* Mise a jour automatique de dotclear
+* L'impossibilité de mise a jour automatique de dotclear
+* L'impossibilité de décompresser les fichiers zip superieur a 1 Mo
 
 ## Pré-requis ##
 * Dotclear 2.9 ou plus
-* Hébergement Free
+* Hébergement Free (PHP 5.6)
 
 ## Utilisation ##
 Tout est automatique lors de l'installation.
