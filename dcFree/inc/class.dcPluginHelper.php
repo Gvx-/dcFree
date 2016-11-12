@@ -39,7 +39,7 @@ abstract class dcPluginHelper29h {
 		$step = (empty($_GET['step_pu']) ? $old_version : $_GET['step_pu']);
 		unset($_GET['step_pu']);												# reset for next plugin
 		$timeout = time() + ini_get('max_execution_time') - 5;			# timeout = max_execution_time - 5 seconds
-		$this->debugLog('<'.__METHOD__.'>: old_version='.$old_version.' / step='.$step);
+		$this->debugLog('installActions', '<'.__METHOD__.'>: old_version='.$old_version.' / step='.$step);
 		if(!empty($old_version)) {
 			try {
 				if(version_compare($old_version, '2.0.0-r0143', '<') && version_compare($step, '2.0.0-r0143', '<')) {
@@ -181,9 +181,9 @@ abstract class dcPluginHelper29h {
 		if(is_file($debug_options)) { require_once($debug_options); }
 
 		# start logfile
-		$this->debugLog('*****************************************************');
-		$this->debugLog('Start log - Version: '.$this->core->getVersion($this->plugin_id));
-		$this->debugLog('Page: '.$_SERVER['REQUEST_URI']);
+		$this->debugLog('START_DEBUG');
+		$this->debugLog('Start log', 'version: '.$this->core->getVersion($this->plugin_id));
+		$this->debugLog('Page', $_SERVER['REQUEST_URI']);
 
 		# Set admin context
 		if(defined('DC_CONTEXT_ADMIN')) {
@@ -226,7 +226,7 @@ abstract class dcPluginHelper29h {
 			$this->installActions($old_version);
 			# valid install
 			$this->core->setVersion($this->plugin_id, $new_version);
-			$this->debugLog('Update version '.$new_version);
+			$this->debugLog('Update', 'version '.$new_version);
 			return true;
 		} catch (Exception $e) {
 			$this->debugDisplay('[Install] : '.$e->getMessage());
@@ -236,17 +236,18 @@ abstract class dcPluginHelper29h {
 	}
 
 	public final function uninstall() {
-		$this->debugLog('uninstall version '.$this->core->getVersion($this->plugin_id));
+		$this->debugLog('uninstall', 'version '.$this->core->getVersion($this->plugin_id));
 		# specifics uninstall actions
-		$this->uninstallActions();
-		# clean DC_VAR
-		if(self::getVarDir($this->plugin_id)) { files::deltree(self::getVarDir($this->plugin_id)); }
-		# delete all users prefs
-		$this->core->auth->user_prefs->delWorkSpace($this->plugin_id);
-		# delete all blogs settings
-		$this->core->blog->settings->delNamespace($this->plugin_id);
-		# delete version
-		$this->core->delVersion($this->plugin_id);
+		if($this->uninstallActions()) {
+			# clean DC_VAR
+			if(self::getVarDir($this->plugin_id)) { files::deltree(self::getVarDir($this->plugin_id)); }
+			# delete all users prefs
+			$this->core->auth->user_prefs->delWorkSpace($this->plugin_id);
+			# delete all blogs settings
+			$this->core->blog->settings->delNamespace($this->plugin_id);
+			# delete version
+			$this->core->delVersion($this->plugin_id);
+		}
 	}
 
 	protected final function configLink($label, $redir=null, $prefix='', $suffix='') {
@@ -507,19 +508,25 @@ abstract class dcPluginHelper29h {
 	protected final function debugDisplay($msg) {
 		if($this->debug_mode && !empty($msg)) {
 			if(defined('DC_CONTEXT_ADMIN')) { dcPage::addWarningNotice(':: [DEBUG] :: ['.$this->plugin_id.']<br />'.$msg); }
-			$this->debugLog('[Debug display]'.$msg);
+			$this->debugLog('[Debug display]', $msg);
 		}
 	}
 
 	public final function debugLog($text, $value=null) {
 		if($this->debug_log && !empty($text)) {
 			if(empty($this->debug_logfile)) { $this->setDebugFilename(); }				# initialization
-			if(is_bool($value)) {
+			if($text == 'START_DEBUG') {
+				$text = '**START_DEBUG***************************************************';
+			} elseif(is_bool($value)) {
 				$text .= ' : '.($value ? 'True' : 'False');
 			} elseif(is_numeric($value)) {
 				$text .= ' : '.$value;
 			} elseif(is_string($value)) {
-				$text .= ' : '.$value;
+				if(strpos($value, "\n") === false) {
+					$text .= ' : '.$value;
+				} else {
+					$text .= ' :'.NL.$value.NL.str_pad('', 60, '*');
+				}
 			} elseif(is_null($value)) {
 				$text .= ' : <null>';
 			} elseif(empty($value)) {
@@ -542,6 +549,7 @@ abstract class dcPluginHelper29h {
 		if($this->debug_log) {
 			if($this->debug_log_reset && $reset_file && is_file($this->debug_logfile)) { @unlink($this->debug_logfile); }
 		}
+		@file_put_contents ($this->debug_logfile, NL, FILE_APPEND);
 	}
 
 }

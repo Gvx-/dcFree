@@ -34,11 +34,12 @@ class dcFree extends dcPluginHelper29h {
 		if (!is_file($append_file)) { throw new Exception(sprintf(__('File %s does not exist.'), $append_file)); }
 		# Backup original config.php
 		@copy(DC_RC_PATH, DC_RC_PATH.'.beforeDcFree.bak');
+		@copy(DC_RC_PATH, self::getVarDir($this->plugin_id, true).'/'.basename(DC_RC_PATH).'.beforeDcFree.bak');
 		# Erase old in config.php
 		$config_file = rtrim(preg_replace('/'.self::CONFIG_BEGIN.'.*'.self::CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH)));
 		$this->debugLog('config after erase DCFREE', $config_file);
 		/* # Erase END MARK of php in config.php "?>" */
-		$config_file = preg_replace('/\?>$/s', "\n", $config_file);
+		$config_file = rtrim(preg_replace('/\?>$/s', "\n", $config_file));
 		$this->debugLog('config after erase "?>"', $config_file);
 		# Add new code to config.php
 		@file_put_contents(DC_RC_PATH, $config_file."\n".self::CONFIG_BEGIN.@file_get_contents($append_file).self::CONFIG_END);
@@ -49,12 +50,14 @@ class dcFree extends dcPluginHelper29h {
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
 		# clean config.php
 		@copy(DC_RC_PATH, DC_RC_PATH.'.afterDcFree.bak');
+		@copy(DC_RC_PATH, self::getVarDir($this->plugin_id, true).'/'.basename(DC_RC_PATH).'.afterDcFree.bak');
 		# Erase old in config.php
 		$config_file = rtrim(preg_replace('/'.self::CONFIG_BEGIN.'.*'.self::CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH)));
 		/* # Erase END MARK of php in config.php "?>" */
 		$config_file = preg_replace('/\?>$/s', "\n", $config_file);
 		# Add new code to config.php
 		@file_put_contents(DC_RC_PATH, $config_file);
+		return false;		// garder la sauvegarde des fichier config.php
 	}
 
 	# actions _admin file
