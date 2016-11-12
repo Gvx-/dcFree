@@ -515,8 +515,8 @@ abstract class dcPluginHelper29h {
 	public final function debugLog($text, $value=null) {
 		if($this->debug_log && !empty($text)) {
 			if(empty($this->debug_logfile)) { $this->setDebugFilename(); }				# initialization
-			if($text == 'START_DEBUG') {
-				$text = '**START_DEBUG***************************************************';
+			if(strtoupper($text) == 'START_DEBUG') {
+				$text = '**'.strtoupper($text).'*****************************************************';
 			} elseif(is_bool($value)) {
 				$text .= ' : '.($value ? 'True' : 'False');
 			} elseif(is_numeric($value)) {

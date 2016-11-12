@@ -36,10 +36,10 @@ class dcFree extends dcPluginHelper29h {
 		@copy(DC_RC_PATH, DC_RC_PATH.'.beforeDcFree.bak');
 		# Erase old in config.php
 		$config_file = rtrim(preg_replace('/'.self::CONFIG_BEGIN.'.*'.self::CONFIG_END.'/s', '', @file_get_contents(DC_RC_PATH)));
-		$this->debugLog('config after erase DCFREE', $config_file);
+		/*$this->debugLog('config after erase DCFREE', $config_file);/**/
 		/* # Erase END MARK of php in config.php "?>" */
 		$config_file = rtrim(preg_replace('/\?>$/s', "\n", $config_file));
-		$this->debugLog('config after erase "?>"', $config_file);
+		/*$this->debugLog('config after erase "?>"', $config_file);/**/
 		# Add new code to config.php
 		@file_put_contents(DC_RC_PATH, $config_file."\n".self::CONFIG_BEGIN.@file_get_contents($append_file).self::CONFIG_END);
 	}
