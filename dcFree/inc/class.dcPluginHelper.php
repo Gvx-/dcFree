@@ -451,7 +451,7 @@ abstract class dcPluginHelper29h {
 	protected static function getVarDir($dir='', $create=false) {
 		$dir = trim($dir, '\\/');
 		$var_dir = path::real(DC_VAR.(empty($dir) ? '' : '/'.$dir), false);
-		if(strpos($var_dir, DC_VAR) === false) { throw new Exception(__('The folder is not in the var directory')); }
+		if(strpos($var_dir, path::real(DC_VAR)) === false) { throw new Exception(__('The folder is not in the var directory')); }
 		if(!is_dir($var_dir)) {
 			if($create) {
 				if(!@mkdir($var_dir, 0700, true)) { throw new Exception(__('Creating a var directory failed')); }
