@@ -456,11 +456,11 @@ abstract class dcPluginHelper29h {
 	protected static function getVarDir($dir='', $create=false) {
 		$dir = trim($dir, '\\/');
 		$var_dir = path::real(DC_VAR.(empty($dir) ? '' : '/'.$dir), false);
-		if(strpos($var_dir, path::real(DC_VAR)) === false) { throw new Exception(__('The folder is not in the var directory')); }
+		if(strpos($var_dir, path::real(DC_VAR, false)) === false) { $this->core->error->add(__('The folder is not in the var directory')); }
 		if(!is_dir($var_dir)) {
 			if($create) {
 				@files::makeDir($var_dir, true);
-				if(!is_dir($var_dir)) { throw new Exception(__('Creating a var directory failed')); }
+				if(!is_dir($var_dir)) { $this->core->error->add(__('Creating a var directory failed')); }
 				$f = DC_VAR.'/.htaccess';
 				if (!file_exists($f)) { @file_put_contents($f,'Require all denied'.NL.'Deny from all'.NL); }
 			} else{

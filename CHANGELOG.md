@@ -4,6 +4,8 @@ Changelog
 Version 0.2.0 (2016-11-15)
 --------------------------
 * Suppression du parametre "updateNoBackup" (Free n'interdit pas l'écriture de fichier > 1Mo)
+* Correction d'un fatal erreur en cas d'absence du repertoire DC_VAR (dotclear 2.9.x)
+* Remplacement des exceptions PHP par des erreurs dotclear
 
 Version 0.1.5 (2016-11-14)
 --------------------------
