@@ -8,9 +8,9 @@
 if(!defined('DC_RC_PATH')) { return; }
 
 if (!defined('NL')) { define('NL', "\n"); }		// New Line
-if (!defined('DC_VAR')) { define('DC_VAR', DC_ROOT.'/var'); }		// emulation DC_VAR for dc < 2.10
+if (!defined('DC_VAR')) { define('DC_VAR', path::real(DC_ROOT).'/var'); }	// emulation DC_VAR for dc < 2.10
 
-if(!function_exists('getInstance')) {								// get class instance in $core
+if(!function_exists('getInstance')) {										// get class instance in $core
 	function getInstance($plugin) {
 		return $GLOBALS['core']->{$plugin};
 	}
@@ -182,7 +182,7 @@ abstract class dcPluginHelper29h {
 
 		# start logfile
 		$this->debugLog('START_DEBUG');
-		$this->debugLog('Start log', 'version: '.$this->core->getVersion($this->plugin_id));
+		$this->debugLog('Version', $this->core->getVersion($this->plugin_id));
 		$this->debugLog('Page', $_SERVER['REQUEST_URI']);
 
 		# Set admin context
@@ -213,6 +213,11 @@ abstract class dcPluginHelper29h {
 		//$this->debugDisplay('Debug mode actived for this plugin');
 	}
 
+	public function __destruct() {
+		# end logfile
+		$this->debugLog('END_DEBUG');
+	}
+	
 	### Admin functions ###
 
 	public final function _install() {
@@ -454,7 +459,8 @@ abstract class dcPluginHelper29h {
 		if(strpos($var_dir, path::real(DC_VAR)) === false) { throw new Exception(__('The folder is not in the var directory')); }
 		if(!is_dir($var_dir)) {
 			if($create) {
-				if(!@mkdir($var_dir, 0700, true)) { throw new Exception(__('Creating a var directory failed')); }
+				@files::makeDir($var_dir, true);
+				if(!is_dir($var_dir)) { throw new Exception(__('Creating a var directory failed')); }
 				$f = DC_VAR.'/.htaccess';
 				if (!file_exists($f)) { @file_put_contents($f,'Require all denied'.NL.'Deny from all'.NL); }
 			} else{
@@ -515,41 +521,45 @@ abstract class dcPluginHelper29h {
 	public final function debugLog($text, $value=null) {
 		if($this->debug_log && !empty($text)) {
 			if(empty($this->debug_logfile)) { $this->setDebugFilename(); }				# initialization
-			if(strtoupper($text) == 'START_DEBUG') {
-				$text = '**'.strtoupper($text).'*****************************************************';
+			$cmd = array('START_DEBUG', 'END_DEBUG');
+			if(in_array(strtoupper($text), $cmd)) {
+				$text = str_pad('**'.strtoupper($text), 66,'*');
 			} elseif(is_bool($value)) {
 				$text .= ' : '.($value ? 'True' : 'False');
 			} elseif(is_numeric($value)) {
 				$text .= ' : '.$value;
 			} elseif(is_string($value)) {
-				if(strpos($value, "\n") === false) {
+				if(strpos($value, NL) === false) {
 					$text .= ' : '.$value;
 				} else {
-					$text .= ' :'.NL.$value.NL.str_pad('', 60, '*');
+					$text .= ' :'.NL.$value.NL.str_pad('END_VALUE', 66, '*');
 				}
 			} elseif(is_null($value)) {
 				$text .= ' : <null>';
 			} elseif(empty($value)) {
 				$text .= ' : <empty>';
 			} else {
-				$text .= ' :'.NL.print_r($value, true).NL.str_pad('', 60, '*');
+				$text .= ' :'.NL.print_r($value, true).NL.str_pad('END_VALUE', 66, '*');
 			}
-			@file_put_contents ($this->debug_logfile, NL.'['.date('Y-m-d-H-i-s').'] : ['.$this->plugin_id.'] : ['.$this->core->blog->id.'] : '.$text, FILE_APPEND);
+			@file_put_contents ($this->debug_logfile, NL.'['.date('YmdHis').'-'.$this->plugin_id.'-'.$this->core->blog->id.'] '.$text, FILE_APPEND);
 		}
 	}
 
 	public final function setDebugFilename($filename=null, $reset_file=false) {
-		if(empty($filename)) {
-			$this->debug_logfile = self::getVarDir('logs', true).'/log_'.$this->plugin_id.'.txt';
-		} elseif(is_dir(dirname($filename))) {
+		if(empty($filename)) { $filename = self::getVarDir('logs', true).'/log_'.$this->plugin_id.'.txt'; }
+		if(!empty($this->debug_logfile)) { $this->debugLog('Change to file', $filename); }
+		if(is_dir(dirname($filename))) {
 			$this->debug_logfile = $filename;
 		} else {
 			$this->debug_logfile = self::getVarDir('logs', true).'/'.basename($filename);
 		}
 		if($this->debug_log) {
-			if($this->debug_log_reset && $reset_file && is_file($this->debug_logfile)) { @unlink($this->debug_logfile); }
+			if($this->debug_log_reset && $reset_file && is_file($this->debug_logfile)) {
+				@unlink($this->debug_logfile);
+			} else {
+				@file_put_contents ($this->debug_logfile, NL, FILE_APPEND);
+			}
 		}
-		@file_put_contents ($this->debug_logfile, NL, FILE_APPEND);
 	}
 
 }
