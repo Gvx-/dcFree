@@ -11,7 +11,7 @@ $this->registerModule(
 	/* Name */			'dcFree',
 	/* Description*/	'Adaptation for Free hosting',
 	/* Author */		'Gvx',
-	/* Version */		'0.2.0-0006',
+	/* Version */		'0.2.0',
 	array(
 		/* standard plugin options dotclear */
 		'permissions'				=>	'admin'

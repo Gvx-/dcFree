@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 0.2.0 (2016-11-15)
+Version 0.2.0 (2016-11-16)
 --------------------------
 * Suppression du parametre "updateNoBackup" (Free n'interdit pas l'écriture de fichier > 1Mo)
 * Correction d'un fatal erreur en cas d'absence du repertoire DC_VAR (dotclear 2.9.x)
