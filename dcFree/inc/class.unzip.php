@@ -21,6 +21,8 @@ class fileUnzip {
 
 	protected $exclude_pattern = '';
 
+	const ER_NOZIP = 19;
+
 	public function __construct($file_name) {
 		$this->file_name = $file_name;
 	}
@@ -30,7 +32,7 @@ class fileUnzip {
 	}
 
 	public function close() {
-		if($this->fp) {
+		if(is_resource($this->fp)) {
 			zip_close($this->fp);
 			$this->fp = null;
 		}
@@ -76,7 +78,9 @@ class fileUnzip {
 
 	public function unzip($file_name, $target=false) {
 		if(empty($this->compressed_list)) {
-			$this->getList($file_name);
+			if($this->getList($file_name) === false) {
+				return false;
+			}
 		}
 
 		if(!isset($this->compressed_list[$file_name])) {
@@ -188,13 +192,14 @@ class fileUnzip {
 
 	protected function fp() {
 		if($this->fp === null) {
-			$this->fp = zip_open($this->file_name);
+			$this->fp = @zip_open($this->file_name);
 		}
-
-		if(!is_resource($this->fp)) {
+		//* 
+		//if(is_resource($this->fp)) {
+		if(!is_resource($this->fp) && ($this->fp != self::ER_NOZIP)) {
 			throw new Exception('Unable to open file.');
 		}
-
+		//*/
 		return $this->fp;
 	}
 
@@ -234,31 +239,35 @@ class fileUnzip {
 
 	protected function loadFileListByEOF($stop_on_file=false, $exclude=false) {
 		$fp = $this->fp();
-		while(is_resource($zip_entry = zip_read($fp))) {
-			$name = str_replace('\\', '/', zip_entry_name($zip_entry));
-			if($exclude && preg_match($exclude, $name)) {
-				continue;
+		if(is_resource($fp)) {
+			while(is_resource($zip_entry = zip_read($fp))) {
+				$name = str_replace('\\', '/', zip_entry_name($zip_entry));
+				if($exclude && preg_match($exclude, $name)) {
+					continue;
+				}
+
+				$this->compressed_list[$name]['file_name']				= $name;
+				$this->compressed_list[$name]['is_dir']					= substr($name, -1, 1) == '/';
+				$this->compressed_list[$name]['compression_method']		= zip_entry_compressionmethod($zip_entry);
+				$this->compressed_list[$name]['version_needed']			= null;
+				$this->compressed_list[$name]['lastmod_datetime']		= null;
+				$this->compressed_list[$name]['crc-32']					= null;
+				$this->compressed_list[$name]['compressed_size']		= zip_entry_compressedsize ($zip_entry);
+				$this->compressed_list[$name]['uncompressed_size']		= zip_entry_filesize($zip_entry);
+				$this->compressed_list[$name]['extra_field']			= null;
+				$this->compressed_list[$name]['contents_start_offset']	= null;
+
+				zip_entry_close($zip_entry);
+
+				if(strtolower($stop_on_file) == strtolower($name)) {
+					break;
+				}
 			}
-
-			$this->compressed_list[$name]['file_name']				= $name;
-			$this->compressed_list[$name]['is_dir']					= substr($name, -1, 1) == '/';
-			$this->compressed_list[$name]['compression_method']		= zip_entry_compressionmethod($zip_entry);
-			$this->compressed_list[$name]['version_needed']			= null;
-			$this->compressed_list[$name]['lastmod_datetime']		= null;
-			$this->compressed_list[$name]['crc-32']					= null;
-			$this->compressed_list[$name]['compressed_size']		= zip_entry_compressedsize ($zip_entry);
-			$this->compressed_list[$name]['uncompressed_size']		= zip_entry_filesize($zip_entry);
-			$this->compressed_list[$name]['extra_field']			= null;
-			$this->compressed_list[$name]['contents_start_offset']	= null;
-
-			zip_entry_close($zip_entry);
-
-			if(strtolower($stop_on_file) == strtolower($name)) {
-				break;
-			}
+			$this->close();
+			return true;
 		}
-		$this->close();
-		return true;
+		//$this->close();
+		return false;
 	}
 
 	protected function loadFileListBySignatures($stop_on_file=false, $exclude=false) {

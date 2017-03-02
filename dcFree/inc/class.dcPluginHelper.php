@@ -429,6 +429,18 @@ abstract class dcPluginHelper29h {
 			}
 		}
 	}
+	
+	protected final function settingDrop($key) {
+		$s = new dcNamespace($this->core, null, $this->plugin_id);
+		$s->drop($key);
+		unset($s);
+	}
+
+	protected final function userSettingDrop($key) {
+		$s = new dcWorkspace($this->core, $this->core->auth->userID(), $this->plugin_id);
+		$s->drop($key);
+		unset($s);
+	}
 
 	public final function info($item=null, $default=null) {
 		if(empty($item) || $item == 'id') {
@@ -513,7 +525,7 @@ abstract class dcPluginHelper29h {
 
 	protected final function debugDisplay($msg) {
 		if($this->debug_mode && !empty($msg)) {
-			if(defined('DC_CONTEXT_ADMIN')) { dcPage::addWarningNotice(':: [DEBUG] :: ['.$this->plugin_id.']<br />'.$msg); }
+			if(defined('DC_CONTEXT_ADMIN')) { dcPage::addWarningNotice('<strong>DEBUG - '.$this->plugin_id.'</strong>&nbsp;:&nbsp;'.$msg); }
 			$this->debugLog('[Debug display]', $msg);
 		}
 	}

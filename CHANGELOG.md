@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Version 0.2.1 (2017-03-02)
+--------------------------
+* Correctif sur la detection de fichier compressé (import de fichier à plat)
+
 Version 0.2.0 (2016-11-16)
 --------------------------
 * Suppression du parametre "updateNoBackup" (Free n'interdit pas l'écriture de fichier > 1Mo)

@@ -18,11 +18,9 @@ class dcFree extends dcPluginHelper29h {
 
 	# specific actions for install
 	protected function installActions($old_version) {
-		if(version_compare($old_version, '0.1.6-0008', '<')) {
+		if(version_compare($old_version, '0.2', '<')) {
 			# delete unnecessary settings
-			$s = new dcNamespace($this->core, null, 'dcFree');
-			$s->drop('updateNoBackup');
-			unset($s);
+			$this->settingDrop('updateNoBackup');
 		}
 		if(!defined('DC_CONTEXT_ADMIN')) { return; }
 		# Check config.php file
