@@ -1,4 +1,4 @@
-# README # 
+# README #
 
 Ce plugin pour [Dotclear](http://fr.dotclear.org/) permet de l'adapter aux limitations de l’hébergeur Free.
 
