@@ -11,14 +11,14 @@ $this->registerModule(
 	/* Name */			'dcFree',
 	/* Description*/	'Adaptation for Free hosting',
 	/* Author */		'Gvx',
-	/* Version */		'0.2.1',
+	/* Version */		'0.2.2',
 	array(
 		/* standard plugin options dotclear */
 		'permissions'				=>	'admin'
 		, 'type'					=>	'plugin'
 		, 'priority'				=>	1010
 		, 'support'		/* url */	=>	'https://forum.dotclear.org/viewtopic.php?pid=338582'
-		, 'details' 	/* url */	=>	'https://bitbucket.org/Gvx_/dcfree'
+		, 'details' 	/* url */	=>	'https://github.com/Gvx-/dcFree'
 		, 'requires'	/* id(s) */	=>	array(
 			array('core', '2.9')
 		)
