@@ -16,10 +16,10 @@ Ce plugin contourne les limitations suivantes de l’hébergeur Free:
 Tout est automatique lors de l'installation.
 
 ## Téléchargements ##
-Vous pouvez télécharger les packages [ici](https://bitbucket.org/Gvx_/dcfree/downloads)
+Vous pouvez télécharger les packages [ici](https://github.com/Gvx-/dcFree/releases)
 
 ## Signaler un dysfonctionnement ##
-Vous pouvez signaler un dysfonctionnement ou faire une demande d’amélioration [ici](https://bitbucket.org/Gvx_/dcfree/issues/new)
+Vous pouvez signaler un dysfonctionnement ou faire une demande d’amélioration [ici](https://github.com/Gvx-/dcFree/issues/new)
 
 ## Licence ##
 Ce code est sous licence [GPL version 2.0](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
