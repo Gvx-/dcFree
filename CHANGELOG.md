@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Version 0.2.2 (2020-02-21)
+--------------------------
+* Changement de forge (de bitbucket.org à github.com)
+
 Version 0.2.1 (2017-03-02)
 --------------------------
 * Correctif sur la detection de fichier compressé (import de fichier à plat)
