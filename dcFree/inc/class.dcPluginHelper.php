@@ -19,7 +19,7 @@ if(!function_exists('getInstance')) {										// get class instance in $core
 abstract class dcPluginHelper29h {
 
 	### Constants ###
-	const VERSION = '2.9.h';					// class version
+	const VERSION = '2.9.0.9';					// class version
 
 	### Specific functions to overload ###
 
@@ -240,10 +240,11 @@ abstract class dcPluginHelper29h {
 		return false;
 	}
 
-	public final function uninstall() {
+	public final function uninstall($plugin) {
 		$this->debugLog('uninstall', 'version '.$this->core->getVersion($this->plugin_id));
 		# specifics uninstall actions
-		if($this->uninstallActions()) {
+		if($plugin['id'] == $this->plugin_id) {
+			if($this->uninstallActions()) {
 			# clean DC_VAR
 			if(self::getVarDir($this->plugin_id)) { files::deltree(self::getVarDir($this->plugin_id)); }
 			# delete all users prefs
@@ -254,6 +255,7 @@ abstract class dcPluginHelper29h {
 			$this->core->delVersion($this->plugin_id);
 		}
 	}
+}
 
 	protected final function configLink($label, $redir=null, $prefix='', $suffix='') {
 		if(version_compare(DC_VERSION, '2.11-dev-r3326', '<=')) {
