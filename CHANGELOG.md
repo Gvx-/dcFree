@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.2.3 (2020-03-xx)
+--------------------------
+
+* Correctif procédure  de désinstallation
+
 Version 0.2.2 (2020-02-21)
 --------------------------
 
