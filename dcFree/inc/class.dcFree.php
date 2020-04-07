@@ -1,16 +1,22 @@
 <?php
-/* -- BEGIN LICENSE BLOCK -----------------------------------------------------
- * This file is part of plugin exportFree for Dotclear 2.
- * Copyright © 2015-2016 Gvx
- * Licensed under the GPL version 2.0 license.
- * (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
- * -- END LICENSE BLOCK -----------------------------------------------------*/
-if(!defined('DC_RC_PATH')) { return; }
+/**
+  * This file is part of dcFree plugin for Dotclear 2.
+  *
+  * @package Dotclear\plungin\dcFree
+  *
+  * @author Gvx <g.gvx@free.fr>
+  * @copyright © 2015-2020 Gvx
+  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
+
+ if(!defined('DC_RC_PATH')) { return; }
+
+if(!isset($__autoload['dcPluginHelper216'])) { $__autoload['dcPluginHelper216'] = dirname(__FILE__).'/class.dcPluginHelper.php'; }
 
 __('Adaptation for Free hosting');
 
 
-class dcFree extends dcPluginHelper29h {
+class dcFree extends dcPluginHelper216 {
 
 	# tags begin and end for config patch
 	const CONFIG_BEGIN = "# BEGIN Free hosting bootstrap\n\n";
@@ -60,7 +66,7 @@ class dcFree extends dcPluginHelper29h {
 		$scope = 'global';
 		if (isset($_POST['save'])) {
 			try {
-				
+
 			} catch(exception $e) {
 				//$this->core->error->add($e->getMessage());
 				$this->core->error->add(__('Unable to save the configuration'));
@@ -79,10 +85,11 @@ class dcFree extends dcPluginHelper29h {
 					&nbsp;&nbsp;'.__('Overloading the class fileunzip').'
 				</p>
 			</div>
-			';
+			<hr />
+			'.$this->adminFooterInfo();
 	}
 
-	# specifics plugin functions 
+	# specifics plugin functions
 	public static function getPatchs() {
 		return array_keys(array_filter($GLOBALS['core']->dcFree->info('_patchs')));
 	}

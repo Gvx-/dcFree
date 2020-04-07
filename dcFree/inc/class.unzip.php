@@ -1,11 +1,16 @@
 <?php
-/* -- BEGIN LICENSE BLOCK -----------------------------------------------------
- * This file is part of plugin dcFree for Dotclear 2.
- * Copyright (c) 2003-2013 Olivier Meunier & Association Dotclear (part of Clearbricks.)
- * Copyright © 2016 Gvx
- * Licensed under the GPL version 2.0 license.
- * (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
- * -- END LICENSE BLOCK -----------------------------------------------------*/
+/**
+  * This file is part of dcFree plugin for Dotclear 2.
+  *
+  * @package Dotclear\plungin\dcFree
+  *
+  * @author Olivier Meunier
+  * @author Association Dotclear
+  * @author Gvx <g.gvx@free.fr>
+  * @copyright © 2003-2013 Olivier Meunier & Association Dotclear (part of Clearbricks.)
+  * @copyright © 2016-2020 Gvx
+  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
 
 class fileUnzip {
 	protected $file_name;
@@ -194,7 +199,7 @@ class fileUnzip {
 		if($this->fp === null) {
 			$this->fp = @zip_open($this->file_name);
 		}
-		//* 
+		//*
 		//if(is_resource($this->fp)) {
 		if(!is_resource($this->fp) && ($this->fp != self::ER_NOZIP)) {
 			throw new Exception('Unable to open file.');

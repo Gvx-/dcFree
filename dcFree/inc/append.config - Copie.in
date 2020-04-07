@@ -1,0 +1,10 @@
+$plugins_paths = array_reverse(explode(PATH_SEPARATOR, DC_PLUGINS_ROOT));
+foreach($plugins_paths as $p) {
+	if(is_dir($p.'/dcFree')) {
+		$free_bootstrap = realpath($p."/dcFree/inc/bootstrap.php");
+		if(!is_file($p.'/dcFree/_disabled') && is_file($free_bootstrap)) {
+			require_once $free_bootstrap;
+			break;
+		}
+	}
+}

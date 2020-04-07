@@ -1,14 +1,22 @@
 <?php
-/* -- BEGIN LICENSE BLOCK -----------------------------------------------------
- * This file is part of plugin dcFree for Dotclear 2.
- * Copyright © 2016 Gvx
- * Licensed under the GPL version 2.0 license.
- * (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
- * -- END LICENSE BLOCK -----------------------------------------------------*/
-if(!defined('DC_RC_PATH')) { return; }
+/**
+  * This file is part of dcFree plugin for Dotclear 2.
+  *
+  * @package Dotclear\plungin\dcFree
+  *
+  * @author Gvx <g.gvx@free.fr>
+  * @copyright © 2015-2020 Gvx
+  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
 
-$__autoload['dcPluginHelper29h'] = dirname(__FILE__).'/inc/class.dcPluginHelper.php';
-$__autoload['dcFree'] = dirname(__FILE__).'/inc/class.dcFree.php';
+ if(!defined('DC_RC_PATH')) { return; }
 
-# initialization
-$core->dcFree = new dcFree(basename(dirname(__FILE__)));
+# define id and class specific plugin
+$pluginId = basename(dirname(__FILE__));
+$pluginClassName = $core->plugins->moduleInfo($pluginId, '_class_name');
+
+# Loadings & initialization
+if(!empty($pluginClassName)) {
+	$__autoload[$pluginClassName] = dirname(__FILE__).$core->plugins->moduleInfo($pluginId, '_class_path');
+	$core->{$pluginClassName} = new $pluginClassName($core, $pluginId);
+}
