@@ -90,6 +90,12 @@ class dcFree extends dcPluginHelper216 {
 	}
 
 	# specifics plugin functions
+
+	/**
+	 * getPatchs
+	 *
+	 * @return string
+	 */
 	public static function getPatchs() {
 		return array_keys(array_filter($GLOBALS['core']->dcFree->info('_patchs')));
 	}

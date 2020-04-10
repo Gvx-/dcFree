@@ -1,126 +1,115 @@
 # Language: Français
-# Module: dcFree - 0.1.0-r0048
-# Date: 2016-11-10 20:55:53
-# Translated with translater 2013.05.11
+# Module: dcFree - 0.3.0-dev-r0011
+# Date: 2020-04-10 05:13:42
+# Translated with translater 2020.04.09
 
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: dcFree 0.1.0-r0048\n"
+"Project-Id-Version: dcFree 0.3.0-dev-r0011\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-10T20:55:53+00:00\n"
-"Last-Translator: Gvx\n"
+"PO-Revision-Date: 2020-04-10T05:13:42+00:00\n"
+"Last-Translator: Gvx Gilles\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: inc/class.dcFree.php:10
+#: inc/class.dcFree.php:16
 msgid "Adaptation for Free hosting"
 msgstr "Adaptation pour l'hebergement Free"
 
-#: inc/class.dcFree.php:22
-msgid "Update, no backup (filesize >1Mo)"
-msgstr "Pas de sauvegarde lors des mise a jour (Fichier > 1Mo)"
-
-#: inc/class.dcFree.php:56
-msgid "The backup is Inhibited (limiting the file size to 1MB)."
-msgstr "La sauvegarde est inhibée (limition de la taille du fichier à 1 Mo)."
-
-#: inc/class.dcFree.php:76
-#: inc/class.dcPluginHelper.php:76
+#: inc/class.dcFree.php:72
+#: inc/class.dcPluginHelper.php:84
 msgid "Unable to save the configuration"
 msgstr "Impossible de sauver la configuration"
 
-#: inc/class.dcFree.php:79
-#: inc/class.dcPluginHelper.php:79
+#: inc/class.dcFree.php:75
+#: inc/class.dcPluginHelper.php:87
 msgid "Redirection not found"
 msgstr "Redirection introuvable"
 
-#: inc/class.dcFree.php:85
-msgid "The upgrade option is global (Applies to all blogs)"
-msgstr "La mise à jour des options est globale (S'applique à tous les blogs)"
-
-#: inc/class.dcFree.php:88
-msgid "Inhibits the backup for the update"
-msgstr "Inhibe la sauvegarde de la mise à jour"
-
-#: inc/class.dcFree.php:89
-msgid "Inhibits the backup for the update (limiting the file size to 1MB)."
-msgstr "Inhibe la sauvegarde de la mise à jour (limitation de la taille du fichier à 1 Mo)"
-
-#: inc/class.dcFree.php:92
+#: inc/class.dcFree.php:82
 msgid "Configuration information"
 msgstr "Informations de configuration"
 
-#: inc/class.dcFree.php:95
+#: inc/class.dcFree.php:85
 msgid "Overloading the class fileunzip"
 msgstr "Surcharge de la class fileunzip"
 
-#: inc/class.dcPluginHelper.php:29
-#: inc/class.dcPluginHelper.php:32
-msgid "Enable plugin"
-msgstr "Activer le plugin"
-
-#: inc/class.dcPluginHelper.php:91
-#: inc/class.dcPluginHelper.php:287
-msgid "Enable %s on this blog"
-msgstr "Activer %s pour ce blog"
-
-#: inc/class.dcPluginHelper.php:94
-#: inc/class.dcPluginHelper.php:289
-msgid "Enable the plugin on this blog."
-msgstr "Activer le plugin pour ce blog"
-
-#: inc/class.dcPluginHelper.php:109
+#: inc/class.dcPluginHelper.php:111
 msgid "%s plugin is not configured."
 msgstr "Le plugin %s n'est pas configuré"
 
-#: inc/class.dcPluginHelper.php:119
+#: inc/class.dcPluginHelper.php:121
 msgid "Unable to save the code"
 msgstr "Impossible de sauver le code"
 
-#: inc/class.dcPluginHelper.php:270
+#: inc/class.dcPluginHelper.php:331
 msgid "Scope"
 msgstr "Domaine d'application"
 
-#: inc/class.dcPluginHelper.php:272
+#: inc/class.dcPluginHelper.php:333
 msgid "Go"
 msgstr "Aller"
 
-#: inc/class.dcPluginHelper.php:274
+#: inc/class.dcPluginHelper.php:335
 msgid "Select the blog in which parameters apply"
 msgstr "Sélectionnez le blog auquel s'applique les paramètres"
 
-#: inc/class.dcPluginHelper.php:275
+#: inc/class.dcPluginHelper.php:336
 msgid "Update global options"
 msgstr "Mise à jour des options globales"
 
-#: inc/class.dcPluginHelper.php:312
+#: inc/class.dcPluginHelper.php:348
+msgid "Enable %s on this blog"
+msgstr "Activer %s pour ce blog"
+
+#: inc/class.dcPluginHelper.php:350
+msgid "Enable the plugin on this blog."
+msgstr "Activer le plugin pour ce blog"
+
+#: inc/class.dcPluginHelper.php:380
 msgid "%s menu not present."
 msgstr "le menu %s est absent"
 
-#: inc/class.dcPluginHelper.php:336
+#: inc/class.dcPluginHelper.php:424
 msgid "icon plugin"
 msgstr "Icone"
 
-#: inc/class.dcPluginHelper.php:337
-msgid "Settings"
-msgstr "Paramètres"
-
-#: inc/class.dcPluginHelper.php:340
+#: inc/class.dcPluginHelper.php:427
 msgid "Author(s)"
 msgstr "Auteur(s)"
 
-#: inc/class.dcPluginHelper.php:380
+#: inc/class.dcPluginHelper.php:656
 msgid "The folder is not in the var directory"
 msgstr "Le dossier ne se trouve pas dans le répertoire VAR"
 
-#: inc/class.dcPluginHelper.php:383
+#: inc/class.dcPluginHelper.php:660
 msgid "Creating a var directory failed"
 msgstr "La creation du répertoire VAR a échoué"
 
-#: inc/class.unzip.php:232
-#: inc/class.unzip.php:269
+#: inc/class.unzip.php:92
+msgid "File %s is not compressed in the zip."
+msgstr "Le fichier %s n'est pas compressé dans le zip."
+
+#: inc/class.unzip.php:100
+msgid "Trying to unzip a folder name %s"
+msgstr "Essaye de décompression du dossier %s"
+
+#: inc/class.unzip.php:223
+msgid "Unable to write destination file."
+msgstr "Impossible d'écrire le fichier de destination."
+
+#: inc/class.unzip.php:233
+msgid "Unable to write in target directory, permission denied."
+msgstr "Impossible d'écrire dans le répertoire cible, autorisation refusée."
+
+#: inc/class.unzip.php:242
+#: inc/class.unzip.php:283
 msgid "Function %s isn't supported by dcFree plugin."
 msgstr "La fonction %s n'est pas supporté par le plugin dcFree"
+
+#: inc/class.unzip.php:315
+msgid "Not enough memory to open file."
+msgstr "Mémoire insuffisante pour ouvrir le fichier."
 
